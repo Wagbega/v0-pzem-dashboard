@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [data, setData] = useState<ParsedEntry | null>(null)
   const [isOnline, setIsOnline] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchData = async () => {
     try {
@@ -28,6 +29,8 @@ export default function Dashboard() {
       console.error("[v0] Error fetching ThingSpeak data:", err)
       setError(err instanceof Error ? err.message : "Failed to fetch data")
       setIsOnline(false)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -55,7 +58,7 @@ export default function Dashboard() {
     return date.toLocaleTimeString()
   }
 
-  if (!data && !error) {
+  if (isLoading && !data) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
