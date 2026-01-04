@@ -84,6 +84,8 @@ export default function Dashboard() {
     )
   }
 
+  if (!data) return null
+
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-border glass-strong">
@@ -109,12 +111,10 @@ export default function Dashboard() {
                 />
                 {isOnline ? "Online" : "Offline"}
               </Badge>
-              {data && (
-                <Badge variant="outline" className="hidden sm:flex gap-1.5 glass">
-                  <Clock className="h-3 w-3" />
-                  {formatLastUpdate(data.timestamp)}
-                </Badge>
-              )}
+              <Badge variant="outline" className="hidden sm:flex gap-1.5 glass">
+                <Clock className="h-3 w-3" />
+                {formatLastUpdate(data.timestamp)}
+              </Badge>
             </div>
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function Dashboard() {
                 <Clock className="h-4 w-4" />
                 Last Update
               </div>
-              <div className="text-sm font-medium text-foreground">{data!.timestamp.toLocaleString()}</div>
+              <div className="text-sm font-medium text-foreground">{data.timestamp.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
@@ -143,7 +143,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-1">
-                <div className="text-3xl font-bold text-foreground">{data!.voltage.toFixed(1)}</div>
+                <div className="text-3xl font-bold text-foreground">{data.voltage.toFixed(1)}</div>
                 <p className="text-xs text-muted-foreground">VAC</p>
               </div>
             </CardContent>
@@ -158,7 +158,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-1">
-                <div className="text-3xl font-bold text-foreground">{data!.power.toFixed(0)}</div>
+                <div className="text-3xl font-bold text-foreground">{data.power.toFixed(0)}</div>
                 <p className="text-xs text-muted-foreground">Watts</p>
               </div>
             </CardContent>
@@ -173,7 +173,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-1">
-                <div className="text-3xl font-bold text-foreground">{data!.energy.toFixed(2)}</div>
+                <div className="text-3xl font-bold text-foreground">{data.energy.toFixed(2)}</div>
                 <p className="text-xs text-muted-foreground">kWh</p>
               </div>
             </CardContent>
@@ -188,12 +188,12 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-1">
-                <div className="text-3xl font-bold text-foreground">{data!.batteryPercent.toFixed(0)}%</div>
+                <div className="text-3xl font-bold text-foreground">{data.batteryPercent.toFixed(0)}%</div>
                 <div className="flex items-center gap-2">
                   <div className="flex-1 h-2 glass rounded-full overflow-hidden">
                     <div
                       className={`h-full ${getStatusColor()} transition-all duration-500`}
-                      style={{ width: `${data!.batteryPercent}%` }}
+                      style={{ width: `${data.batteryPercent}%` }}
                     />
                   </div>
                 </div>
@@ -208,9 +208,9 @@ export default function Dashboard() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          <BatteryStatus voltage={data!.batteryVoltage} percentage={data!.batteryPercent} />
-          <SystemMetrics frequency={data!.frequency} powerFactor={data!.powerFactor} />
-          <EnergyStats energy={data!.energy} power={data!.power} />
+          <BatteryStatus voltage={data.batteryVoltage} percentage={data.batteryPercent} />
+          <SystemMetrics frequency={data.frequency} powerFactor={data.powerFactor} />
+          <EnergyStats energy={data.energy} power={data.power} />
         </div>
       </main>
     </div>
