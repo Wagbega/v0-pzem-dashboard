@@ -49,7 +49,7 @@ export function BatteryStatus({ voltage, percentage }: BatteryStatusProps) {
         <div className="grid grid-cols-2 gap-4 pt-2">
           <div>
             <p className="text-xs text-muted-foreground mb-1">Voltage</p>
-            <p className="text-2xl font-bold text-foreground">{voltage.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-foreground">{voltage.toFixed(1)}</p>
             <p className="text-xs text-muted-foreground">VDC</p>
           </div>
           <div>
