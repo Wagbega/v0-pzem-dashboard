@@ -36,7 +36,7 @@ export interface ParsedEntry {
 }
 
 export function parseEntry(entry: ThingSpeakEntry): ParsedEntry {
-  const batteryVoltage = Number.parseFloat(entry.field8 || "0") + 0.14
+  const batteryVoltage = Number.parseFloat(entry.field8 || "0") + 0.42
 
   const minVoltage = 20
   const maxVoltage = 28
