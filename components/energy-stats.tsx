@@ -1,7 +1,9 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { TrendingUp, DollarSign } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { TrendingUp, DollarSign, RotateCcw } from "lucide-react"
 
 interface EnergyStatsProps {
   energy: number
@@ -9,13 +11,32 @@ interface EnergyStatsProps {
 }
 
 export function EnergyStats({ energy, power }: EnergyStatsProps) {
+  const [baselineEnergy, setBaselineEnergy] = useState(0)
+
+  // Calculate energy since reset
+  const energySinceReset = energy - baselineEnergy
+
   // Calculate estimated daily usage based on current power
   const estimatedDailyUsage = (power * 24) / 1000
 
-  // Rough cost calculation (adjust rate as needed)
-  const costPerKwh = 0.12 // $0.12 per kWh
+  const costPerKwh = 230.0
+  const totalCost = energySinceReset * costPerKwh
   const estimatedDailyCost = estimatedDailyUsage * costPerKwh
   const estimatedMonthlyCost = estimatedDailyCost * 30
+
+  console.log("[v0] Energy:", energy, "kWh")
+  console.log("[v0] Baseline:", baselineEnergy, "kWh")
+  console.log("[v0] Energy since reset:", energySinceReset, "kWh")
+  console.log("[v0] Cost per kWh: N", costPerKwh)
+  console.log("[v0] Total cost: N", totalCost)
+  console.log("[v0] Current power:", power, "W")
+  console.log("[v0] Estimated daily usage:", estimatedDailyUsage, "kWh")
+  console.log("[v0] Estimated daily cost: N", estimatedDailyCost)
+  console.log("[v0] Estimated monthly cost: N", estimatedMonthlyCost)
+
+  const handleReset = () => {
+    setBaselineEnergy(energy)
+  }
 
   return (
     <Card className="glass-strong glow-subtle hover:glow-primary transition-all duration-300 border-border/50">
@@ -41,18 +62,29 @@ export function EnergyStats({ energy, power }: EnergyStatsProps) {
         </div>
 
         <div className="pt-4 border-t border-border space-y-3">
-          <div className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Cost Estimates</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Cost Tracking</span>
+            </div>
+            <Button variant="outline" size="sm" onClick={handleReset} className="h-7 px-2 gap-1 bg-transparent">
+              <RotateCcw className="h-3 w-3" />
+              Reset
+            </Button>
           </div>
+
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Daily</span>
-              <span className="text-sm font-semibold text-foreground">${estimatedDailyCost.toFixed(2)}</span>
+              <span className="text-sm text-muted-foreground">Current Cost</span>
+              <span className="text-lg font-bold text-foreground">₦{totalCost.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between items-center pt-2 border-t border-border/50">
+              <span className="text-xs text-muted-foreground">Est. Daily</span>
+              <span className="text-sm font-semibold text-muted-foreground">₦{estimatedDailyCost.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Monthly</span>
-              <span className="text-sm font-semibold text-foreground">${estimatedMonthlyCost.toFixed(2)}</span>
+              <span className="text-xs text-muted-foreground">Est. Monthly</span>
+              <span className="text-sm font-semibold text-muted-foreground">₦{estimatedMonthlyCost.toFixed(2)}</span>
             </div>
           </div>
         </div>
