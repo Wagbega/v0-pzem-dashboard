@@ -205,14 +205,14 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-3 gap-6">
+          <SystemMetrics frequency={data.frequency} powerFactor={data.powerFactor} current={data.current} />
+          <BatteryStatus voltage={data.batteryVoltage} percentage={data.batteryPercent} />
           <VoltageChart />
-          <PowerChart />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          <BatteryStatus voltage={data.batteryVoltage} percentage={data.batteryPercent} />
-          <SystemMetrics frequency={data.frequency} powerFactor={data.powerFactor} current={data.current} />
+        <div className="grid lg:grid-cols-2 gap-6">
+          <PowerChart />
           <EnergyStats energy={data.energy} power={data.power} />
         </div>
       </main>
