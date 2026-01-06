@@ -1,15 +1,14 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Gauge, Radio, Zap } from "lucide-react"
+import { Gauge, Radio } from "lucide-react"
 
 interface SystemMetricsProps {
   frequency: number
   powerFactor: number
-  current: number
 }
 
-export function SystemMetrics({ frequency, powerFactor, current }: SystemMetricsProps) {
+export function SystemMetrics({ frequency, powerFactor }: SystemMetricsProps) {
   const getFrequencyStatus = () => {
     if (frequency >= 49.5 && frequency <= 50.5) return { text: "Normal", color: "text-success" }
     return { text: "Unstable", color: "text-warning" }
@@ -21,15 +20,8 @@ export function SystemMetrics({ frequency, powerFactor, current }: SystemMetrics
     return { text: "Poor", color: "text-warning" }
   }
 
-  const getCurrentStatus = () => {
-    if (current < 5) return { text: "Low", color: "text-muted-foreground" }
-    if (current < 15) return { text: "Normal", color: "text-success" }
-    return { text: "High", color: "text-warning" }
-  }
-
   const freqStatus = getFrequencyStatus()
   const pfStatus = getPowerFactorStatus()
-  const currentStatus = getCurrentStatus()
 
   return (
     <Card className="glass-strong glow-subtle hover:glow-secondary transition-all duration-300">
@@ -66,20 +58,6 @@ export function SystemMetrics({ frequency, powerFactor, current }: SystemMetrics
               <p className="text-xs text-muted-foreground mt-1">PF</p>
             </div>
             <span className={`text-sm font-medium ${pfStatus.color}`}>{pfStatus.text}</span>
-          </div>
-        </div>
-
-        <div className="pt-4 border-t border-border">
-          <div className="flex items-center gap-2 mb-2">
-            <Zap className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Current</span>
-          </div>
-          <div className="flex items-baseline justify-between">
-            <div>
-              <p className="text-3xl font-bold text-foreground">{current.toFixed(2)}</p>
-              <p className="text-xs text-muted-foreground mt-1">A</p>
-            </div>
-            <span className={`text-sm font-medium ${currentStatus.color}`}>{currentStatus.text}</span>
           </div>
         </div>
       </CardContent>

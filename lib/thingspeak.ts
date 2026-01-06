@@ -7,7 +7,6 @@ export interface ThingSpeakEntry {
   field4: string // energy
   field5: string // frequency
   field6: string // power_factor
-  field7: string // current
   field8: string // battery_voltage (VDC)
 }
 
@@ -30,7 +29,6 @@ export interface ParsedEntry {
   energy: number
   frequency: number
   powerFactor: number
-  current: number
   batteryVoltage: number
   timestamp: Date
 }
@@ -49,7 +47,6 @@ export function parseEntry(entry: ThingSpeakEntry): ParsedEntry {
     energy: Number.parseFloat(entry.field4 || "0"),
     frequency: Number.parseFloat(entry.field5 || "0"),
     powerFactor: Number.parseFloat(entry.field6 || "0"),
-    current: Number.parseFloat(entry.field7 || "0"),
     batteryVoltage,
     timestamp: new Date(entry.created_at),
   }
