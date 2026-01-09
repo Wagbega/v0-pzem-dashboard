@@ -18,6 +18,7 @@ export default function Dashboard() {
   const [isOnline, setIsOnline] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [now, setNow] = useState(() => new Date())
 
   const fetchData = async () => {
     try {
@@ -38,6 +39,11 @@ export default function Dashboard() {
     fetchData()
     const interval = setInterval(fetchData, 15000)
     return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const tick = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(tick)
   }, [])
 
   const getStatusColor = () => {
@@ -89,6 +95,8 @@ export default function Dashboard() {
 
   if (!data) return null
 
+  const isStale = now.getTime() - data.timestamp.getTime() > 60000
+
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-border glass-strong">
@@ -116,7 +124,7 @@ export default function Dashboard() {
               </Badge>
               <Badge variant="outline" className="hidden sm:flex gap-1.5 glass">
                 <Clock className="h-3 w-3" />
-                {formatLastUpdate(data.timestamp)}
+                <span className={isStale ? "flash-red" : ""}>{formatLastUpdate(data.timestamp)}</span>
               </Badge>
             </div>
           </div>
@@ -132,6 +140,8 @@ export default function Dashboard() {
                 Last Update
               </div>
               <div className="text-sm font-medium text-foreground">{data.timestamp.toLocaleString()}</div>
+              {/* flash timestamp on mobile when stale */}
+              <div className={`text-sm font-medium ${isStale ? "flash-red" : "text-foreground"}`}>{data.timestamp.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
@@ -205,14 +215,14 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-3 gap-6">
+          <SystemMetrics frequency={data.frequency} powerFactor={data.powerFactor} current={data.current} />
+          <BatteryStatus voltage={data.batteryVoltage} percentage={data.batteryPercent} />
           <VoltageChart />
-          <PowerChart />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          <BatteryStatus voltage={data.batteryVoltage} percentage={data.batteryPercent} />
-          <SystemMetrics frequency={data.frequency} powerFactor={data.powerFactor} />
+        <div className="grid lg:grid-cols-2 gap-6">
+          <PowerChart />
           <EnergyStats energy={data.energy} power={data.power} />
         </div>
       </main>
